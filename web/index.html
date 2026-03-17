@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delayed Notifier</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; }
+        label { display: block; margin: 4px 0; }
+        input, select, textarea { width: 300px; }
+        table { border-collapse: collapse; margin-top: 20px; width: 100%; max-width: 800px; }
+        th, td { border: 1px solid #ccc; padding: 4px 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Delayed Notifier</h1>
+
+    <h2>Create Notification</h2>
+    <form id="create-form">
+        <label>
+            Channel:
+            <select id="channel">
+                <option value="email">email</option>
+                <option value="telegram">telegram</option>
+            </select>
+        </label>
+        <label>
+            Recipient:
+            <input id="recipient" type="text">
+        </label>
+        <label>
+            Message:
+            <textarea id="message" rows="3" required></textarea>
+        </label>
+        <label>
+            Send date:
+            <input id="send_date" type="date" required>
+        </label>
+        <label>
+            Send time:
+            <input id="send_time" type="time" required>
+        </label>
+        <button type="submit">Create</button>
+    </form>
+
+    <h2>Recent Notifications</h2>
+    <button id="refresh">Refresh</button>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Channel</th>
+            <th>Recipient</th>
+            <th>Notification</th>
+            <th>Scheduled At</th>
+            <th>Status</th>
+            <th>Retries</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="notifications-body"></tbody>
+    </table>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
+
