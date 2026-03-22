@@ -11,6 +11,7 @@ import (
 	"WBTech_L3.1/internal/notifier"
 	"WBTech_L3.1/internal/queue"
 	"WBTech_L3.1/internal/repository"
+	"github.com/google/uuid"
 )
 
 type NotificationService struct {
@@ -49,6 +50,7 @@ func (s *NotificationService) Create(ctx context.Context, req CreateRequest) (st
 	}
 
 	n := &model.Notification{
+		ID:          uuid.NewString(),
 		Channel:     req.Channel,
 		Recipient:   recipient,
 		Payload:     req.Message,
@@ -83,8 +85,8 @@ func (s *NotificationService) GetNotificationByID(ctx context.Context, ID string
 	return n, nil
 }
 
-func (s *NotificationService) GetRecentNotifications(ctx context.Context, limit int) ([]model.Notification, error) {
-	return s.repo.GetRecentNotifications(ctx, limit)
+func (s *NotificationService) GetRecentNotifications(ctx context.Context) ([]model.Notification, error) {
+	return s.repo.GetRecentNotifications(ctx)
 }
 
 func (s *NotificationService) UpdateStatus(ctx context.Context, ID string, status model.Status, retryCount int, lastErr *string) error {

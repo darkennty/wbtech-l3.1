@@ -14,7 +14,7 @@ import (
 type Notification interface {
 	Create(ctx context.Context, req CreateRequest) (string, error)
 	GetNotificationByID(ctx context.Context, ID string) (*model.Notification, error)
-	GetRecentNotifications(ctx context.Context, limit int) ([]model.Notification, error)
+	GetRecentNotifications(ctx context.Context) ([]model.Notification, error)
 	UpdateStatus(ctx context.Context, ID string, status model.Status, retryCount int, lastErr *string) error
 	Delete(ctx context.Context, ID string) error
 	CancelNotification(ctx context.Context, id string) error

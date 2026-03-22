@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
 	"WBTech_L3.1/internal/service"
@@ -75,16 +74,7 @@ func (h *Handler) handleDelete(ctx *ginext.Context) {
 }
 
 func (h *Handler) handleList(ctx *ginext.Context) {
-	limitStr := ctx.Query("limit")
-	limit := 50
-
-	if limitStr != "" {
-		if v, err := strconv.Atoi(limitStr); err == nil && v > 0 {
-			limit = v
-		}
-	}
-
-	items, err := h.services.GetRecentNotifications(ctx, limit)
+	items, err := h.services.GetRecentNotifications(ctx)
 	if err != nil {
 		ReturnErrorResponse(ctx, http.StatusInternalServerError, "internal error: "+err.Error())
 		return

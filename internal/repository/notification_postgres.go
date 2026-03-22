@@ -3,10 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"log"
 	"time"
 
 	"WBTech_L3.1/internal/model"
-	"github.com/google/uuid"
 	"github.com/wb-go/wbf/dbpg"
 )
 
@@ -19,9 +19,6 @@ func NewNotificationPostgres(db *dbpg.DB) *NotificationPostgresRepository {
 }
 
 func (r *NotificationPostgresRepository) Create(ctx context.Context, n *model.Notification) (string, error) {
-	if n.ID == "" {
-		n.ID = uuid.NewString() // todo: check
-	}
 	now := time.Now().UTC()
 	n.CreatedAt = now
 	n.UpdatedAt = now
@@ -63,7 +60,7 @@ WHERE id = $1
 	return &n, nil
 }
 
-func (r *NotificationPostgresRepository) GetRecentNotifications(ctx context.Context, limit int) ([]model.Notification, error) {
+func (r *NotificationPostgresRepository) GetRecentNotifications(ctx context.Context) ([]model.Notification, error) {
 	const q = `
 SELECT id, channel, recipient, payload, scheduled_at, status,
        retry_count, last_error, created_at, updated_at
@@ -74,7 +71,12 @@ ORDER BY created_at DESC
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Print(err)
+		}
+	}(rows)
 
 	var res []model.Notification
 	for rows.Next() {

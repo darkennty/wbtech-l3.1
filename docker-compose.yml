@@ -1,0 +1,31 @@
+services:
+
+  db:
+    image: postgres
+    container_name: postgressin
+    environment:
+      PGUSER: ${POSTGRES_USER}
+      POSTGRES_USER: ${POSTGRES_USER}
+      PGDATABASE: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_PASS: ${POSTGRES_PASS}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
